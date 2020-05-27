@@ -1,0 +1,43 @@
+﻿@page "/cerveza"
+
+@using CRUD.Blazor.Data
+@using CRUD.WebAPI.Data
+@inject CervezasService CervezasServ
+
+<h1>Cervezas</h1>
+
+<p>Lista de Cervezas.</p>
+
+@if (cerveza == null)
+{
+    <p><em>Vino vacio...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Marca</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>@cerveza.Nombre</td>
+                    <td>@cerveza.Marca</td>
+                </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    private CRUD.WebAPI.Data.Entities.Cerveza cerveza;
+
+    protected override async Task OnInitializedAsync()
+    {
+        int Id = 1;
+        string url = "https://localhost:44391/api/cervezas/";
+        cerveza = await GenericService<CRUD.WebAPI.Data.Entities.Cerveza>.GetTaskByIdAsync(Id, url);
+        //cerveza = await CervezasService.GetTaskByIdAsync();
+    }
+}
