@@ -21,7 +21,7 @@ namespace CRUD.WebAPI.Controllers
             this.context = context;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<Cerveza>> Get() 
+        public ActionResult<List<Cerveza>> Get() 
         {
             return context.Cervezas.ToList();
         }

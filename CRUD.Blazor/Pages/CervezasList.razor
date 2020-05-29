@@ -1,0 +1,66 @@
+﻿@page "/cerveza"
+
+@using CRUD.Blazor.Data
+@using CRUD.WebAPI.Data
+@inject GenericService<CRUD.WebAPI.Data.Entities.Cerveza> CervezasServ
+
+<h1>Cervezas</h1>
+
+<p>Lista de Cervezas.</p>
+
+@if (listacervezas == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Marca</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cerveza in listacervezas)
+            {
+                <tr>
+                    <td>@cerveza.Nombre</td>
+                    <td>@cerveza.Marca</td>
+                    <td>@cerveza.Cantidad</td>
+                    <td>@cerveza.Precio</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*<div>
+        <button type="button" @onclick= >Agregar Cerveza</button>
+    </div>*@
+}
+
+@code {
+    private CRUD.WebAPI.Data.Entities.Cerveza cerveza;
+
+    string urlcervezas = "https://localhost:44391/api/cervezas/";
+    List<CRUD.WebAPI.Data.Entities.Cerveza> listacervezas = new List<CRUD.WebAPI.Data.Entities.Cerveza>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        listacervezas = await GenericService<CRUD.WebAPI.Data.Entities.Cerveza>.GetAllAsync(urlcervezas);
+    }
+
+    public async Task GuardarAsync()
+    {
+        await GenericService<CRUD.WebAPI.Data.Entities.Cerveza>.PostAsync(urlcervezas, cerveza);
+    }
+
+    public async Task<CRUD.WebAPI.Data.Entities.Cerveza> MostrarIdAsyn()
+    {
+        int Id = 1;
+        cerveza = await GenericService<CRUD.WebAPI.Data.Entities.Cerveza>.GetTaskByIdAsync(Id, urlcervezas);
+        return cerveza;
+        //cerveza = await CervezasService.GetTaskByIdAsync();
+    }
+}
